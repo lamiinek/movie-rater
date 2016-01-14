@@ -33,7 +33,7 @@ def rate():
 
 	for m in movies:
 		m = m.replace(" ", "_").replace("'", "") # replace spaces w/ _ and ' w/ nothing
-		# this allow me to get only the name, not the extension, also i can keep the year in the title, just put a . before it :)
+		# this allow me to get only the name, not the extension
 		name = m.split(".")
 
 		req = r.get(BASE_URL+str(name[0]))
@@ -43,6 +43,7 @@ def rate():
 		critic = html.find("p", attrs={"class": "critic_consensus"})
 		cast = html.find("div", attrs={"class": "media-body"})
 
+		# Make a nice command line display of the results
 		colors = ['green','yellow','red']
 		
 		try:
