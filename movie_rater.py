@@ -9,7 +9,7 @@ Desc: This program will scan movies in a folder and check their rotten tomato pe
 #import selenium
 from bs4 import BeautifulSoup as bs
 import requests as r
-import os, csv
+import os, sys, csv
 #add some color to the display
 from termcolor import colored as color
 from colorama import Fore, Back, Style, init
@@ -17,18 +17,28 @@ from colorama import Fore, Back, Style, init
 def rate():
 	BASE_URL = "http://www.rottentomatoes.com/m/"
 	MOVIES_DIR = "path_to_folder_containing_movies"
-	movies = os.listdir(MOVIES_DIR)
 
-	rank_file = open(str(MOVIES_DIR)+"\_Rottent Tomatoes.txt", "a")
-	csv_file = open(MOVIES_DIR+"\_Movies details.csv", "w", newline="")
+	#get the movie directory path via command line arguments
+	args = len(sys.argv)
+	if args > 1:
+		if os.path.exists(sys.argv[1]):
+			movies = os.listdir(sys.argv[1])
+		else:
+			sys.exit("Impossible to find the folder, check the path again")
+	else:
+		sys.exit("Usage: movie_rater.py [path to folder containing movies]")
+	#movies = os.listdir(MOVIES_DIR)
+
+	rank_file = open(str(sys.argv[1])+"/"+"Rottent Tomatoes.txt", "a")
+	csv_file = open(str(sys.argv[1])+"/"+"Movies details.csv", "w", newline="")
 	csv_w = csv.writer(csv_file, delimiter=",")
-	t = [["Movies", "Rotten Tomatoes", "Cast", "Critics"]] # the title (optional)
+	t = [["Movies", "Rotten Tomatoes %", "Cast", "Critics"]] # the title (optional)
 	csv_w.writerows(t)
 	
 	# table like display
 	print("\n"+"-"*72)
 	print(Fore.RED+" ROTTEN TOMATOES %"+Fore.WHITE+" |		 	MOVIES 				 				")
-	print(""-"*72")
+	print("-"*72)
 	print("		   |")
 
 	for m in movies:
